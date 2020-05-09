@@ -1,68 +1,176 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# VUTTR API
+Este repositório contém uma simples API para o desafio de front-end do BossaBox.
+Requisitos:
+* NodeJS v5.2.0+
 
-## Available Scripts
+## Como executar
+Faça o clone/download deste repositório, execute `npm install` e `npx json-server db.json`. A API fica localizada em `http://localhost:3000`.
 
-In the project directory, you can run:
+## Rotas
+Todas as requisições de POST para esta API devem conter o header `Content-Type: application/json`.
+Esta API contém as seguintes rotas:
 
-### `yarn start`
+* `GET /tools` : lista as ferramentas cadastradas
+* `POST /tools` : cria uma nova ferramenta
+* `DELETE /tools/:id` : apaga a ferramenta com ID :id
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Para filtrar as ferramentas em `GET /tools`, é possível:
+* fazer uma busca global utilizando a query string `?q=:busca`;
+* fazer uma busca por tags individuais utilizando a query string `?tags_like=:busca`.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Exemplos
 
-### `yarn test`
+### GET /tools
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Requisição: 
+```javascript
+GET /tools
+```
+Resposta:
+```javascript
+[
+    {
+        id: 1,
+        title: "Notion",
+        link: "https://notion.so",
+        description: "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ",
+        tags: [
+            "organization",
+            "planning",
+            "collaboration",
+            "writing",
+            "calendar"
+        ]
+    },
+    {
+        id: 2,
+        title: "json-server",
+        link: "https://github.com/typicode/json-server",
+        description: "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+        tags: [
+            "api",
+            "json",
+            "schema",
+            "node",
+            "github",
+            "rest"
+        ]
+    },
+    {
+        id: 3,
+        title: "fastify",
+        link: "https://www.fastify.io/",
+        description: "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+        tags: [
+            "web",
+            "framework",
+            "node",
+            "http2",
+            "https",
+            "localhost"
+        ]
+    }
+]
+```
 
-### `yarn build`
+### GET /tools?q=:busca
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Requisição: 
+```javascript
+GET /tools?q=notion
+```
+Resposta:
+```javascript
+[
+    {
+        id: 1,
+        title: "Notion",
+        link: "https://notion.so",
+        description: "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ",
+        tags: [
+            "organization",
+            "planning",
+            "collaboration",
+            "writing",
+            "calendar"
+        ]
+    }
+]
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### GET /tools?tags_like=:busca
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Requisição: 
+```javascript
+GET /tools?tags_like=node
+```
+Resposta:
+```javascript
+[
+    {
+        id: 2,
+        title: "json-server",
+        link: "https://github.com/typicode/json-server",
+        description: "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+        tags: [
+            "api",
+            "json",
+            "schema",
+            "node",
+            "github",
+            "rest"
+        ]
+    },
+    {
+        id: 3,
+        title: "fastify",
+        link: "https://www.fastify.io/",
+        description: "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+        tags: [
+            "web",
+            "framework",
+            "node",
+            "http2",
+            "https",
+            "localhost"
+        ]
+    }
+]
+```
 
-### `yarn eject`
+### POST /tools
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Requisição:
+```javascript
+// POST /tools
+// Content-Type: application/json
+{
+    "title": "hotel",
+    "link": "https://github.com/typicode/hotel",
+    "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+    "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Resposta:
+```javascript
+{
+    "title": "hotel",
+    "link": "https://github.com/typicode/hotel",
+    "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+    "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"],
+    "id":5
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### DELETE /tools/:id
+Requisição:
+```javascript
+DELETE /tools/5
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Resposta:
+```javascript
+// Status: 200 OK
+{}
+```
